@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Congxion — Congklak Tradisional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --wood-dark:#2a1810;
+  --wood-mid:#5a3a22;
+  --wood-light:#7a5230;
+  --gold:#c9a646;
+  --gold-bright:#e6c869;
+  --gold-soft:#d9bc7a;
+  --cream:#f3e8cc;
+  --cream-deep:#e9d9ad;
+  --clay:#9c5a36;
+  --clay-dark:#6e3d22;
+  --ink:#2a1810;
+  --leaf:#8a9a63;
+  --leaf-dark:#5c6b3f;
+  --green:#5c6e49;
+  --shadow:rgba(0,0,0,.45);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;min-height:100vh;}
+body{
+  font-family:'Lora',serif;
+  color:var(--cream);
+  background:
+    radial-gradient(ellipse at 18% -8%, rgba(230,200,105,.10), transparent 55%),
+    radial-gradient(ellipse at 85% 105%, rgba(138,154,99,.07), transparent 55%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><path d='M10,210 C40,170 30,120 70,100 C100,86 120,100 140,80 C155,66 150,40 175,22' fill='none' stroke='%23c9a646' stroke-width='2' opacity='0.05'/><path d='M60,105 C68,95 82,95 88,106 C82,116 68,116 60,105 Z' fill='%238a9a63' opacity='0.045'/></svg>"),
+    repeating-linear-gradient(100deg, rgba(0,0,0,.10) 0px, rgba(0,0,0,.10) 2px, transparent 2px, transparent 9px),
+    linear-gradient(160deg, #1d100a 0%, #321d11 45%, #2a1810 100%);
+  background-repeat:no-repeat, no-repeat, repeat, repeat, no-repeat;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  overflow-x:hidden;
+}
+.screen{ width:100%; max-width:1180px; }
+.hidden{display:none !important;}
+
+/* ---------- Ornamen sulur-daun mengalir (menyatu di sudut/bingkai, asimetris) ---------- */
+.vine-corner{
+  position:absolute; pointer-events:none; z-index:2;
+  filter:drop-shadow(1px 2px 2px rgba(0,0,0,.5)) drop-shadow(-1px -1px 0 rgba(255,224,160,.12));
+}
+.vine-corner svg{display:block;}
+.vine-tl{ top:-6px; left:-6px; width:126px; height:82px; }
+.vine-tr{ top:-4px; right:-6px; width:92px; height:62px; transform:scaleX(-1); opacity:.92; }
+
+/* garis pembatas: sulur mengalir, bukan pola geometris kaku */
+.flow-divider{ display:flex; justify-content:center; margin:6px 0 28px; }
+.flow-divider svg{ display:block; }
+
+/* lapisan cahaya halus di kartu/panel/papan — memberi depth tanpa menambah markup */
+.card::before, .board-wrap::before, .panel::before{
+  content:''; position:absolute; inset:0; pointer-events:none; border-radius:inherit; z-index:1;
+  background:radial-gradient(ellipse at 28% 0%, rgba(255,255,255,.06), transparent 55%);
+  mix-blend-mode:overlay;
+}
+
+/* ---------- START SCREEN ---------- */
+#start-screen .card{
+  position:relative;
+  background:linear-gradient(160deg, #3a2414, #2a1810);
+  border:1px solid var(--gold);
+  border-radius:18px;
+  box-shadow:0 30px 70px var(--shadow), inset 0 0 60px rgba(201,166,70,.06);
+  padding:48px 44px 40px;
+  text-align:center;
+  max-width:520px;
+  margin:0 auto;
+}
+h1.title{
+  font-family:'Marcellus',serif;
+  font-size:3rem;
+  letter-spacing:.12em;
+  margin:14px 0 4px;
+  color:var(--gold-bright);
+  text-shadow:0 2px 0 #1a0f08, 0 0 26px rgba(230,200,105,.25);
+}
+.subtitle{
+  font-style:italic; color:var(--cream-deep); opacity:.85;
+  font-size:.95rem; letter-spacing:.05em; margin-bottom:34px;
+}
+
+.field-label{
+  display:block; text-align:left; font-size:.78rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:8px; font-weight:600;
+}
+#player-name-a, #player-name-b{
+  width:100%; padding:13px 16px; font-size:1.05rem; font-family:'Lora',serif;
+  border-radius:9px; border:1px solid var(--gold); background:#1f130b;
+  color:var(--cream); outline:none; margin-bottom:8px;
+}
+#player-name-b{ margin-bottom:26px; }
+#player-name-a::placeholder, #player-name-b::placeholder{color:#7a6a52;}
+#player-name-a:focus, #player-name-b:focus{box-shadow:0 0 0 3px rgba(201,166,70,.25);}
+
+.btn{
+  font-family:'Lora',serif; font-weight:600; letter-spacing:.04em; cursor:pointer;
+  border:none; border-radius:10px; transition:transform .15s, box-shadow .15s, filter .15s;
+}
+.btn:active{transform:translateY(1px) scale(.99);}
+.btn-primary{
+  background:linear-gradient(160deg, var(--gold-bright), var(--gold) 70%);
+  color:#241404; padding:14px 0; width:100%; font-size:1.05rem;
+  box-shadow:0 8px 18px rgba(201,166,70,.3), inset 0 1px 0 rgba(255,255,255,.4);
+}
+.btn-primary:hover{filter:brightness(1.06); box-shadow:0 10px 22px rgba(201,166,70,.42);}
+
+.maker{
+  margin-top:32px; font-size:.82rem; color:#a8916b; letter-spacing:.04em;
+}
+.maker b{color:var(--gold-bright); font-weight:600;}
+
+/* ---------- Panel Aturan Permainan ---------- */
+.btn-rules{
+  width:100%; margin-top:22px; padding:12px 16px; border-radius:11px;
+  background:linear-gradient(160deg,#3f2814,#2a1810); border:1px solid rgba(201,166,70,.55);
+  color:var(--gold-bright); font-family:'Lora',serif; font-size:.88rem; letter-spacing:.02em;
+  display:flex; align-items:center; justify-content:center; gap:9px; cursor:pointer;
+  transition:background .15s, border-color .15s;
+}
+.btn-rules:hover{background:#3a2414; border-color:var(--gold);}
+.btn-rules-label{flex:1 1 auto; text-align:center; line-height:1.3;}
+.btn-rules-chev{
+  width:8px; height:8px; flex:0 0 auto; align-self:center;
+  border-right:2px solid var(--gold-bright); border-bottom:2px solid var(--gold-bright);
+  transform:rotate(45deg); transition:transform .25s;
+}
+.btn-rules.open .btn-rules-chev{transform:rotate(225deg);}
+.btn-rules-ic{font-size:1rem; line-height:1; align-self:center;}
+
+.rules-panel{
+  text-align:left; margin-top:14px; padding:20px 20px 6px;
+  background:
+    repeating-linear-gradient(96deg, rgba(0,0,0,.10) 0px, rgba(0,0,0,.10) 1.5px, transparent 1.5px, transparent 8px),
+    linear-gradient(170deg, #402714, #2a1810 60%);
+  border:1px solid rgba(201,166,70,.4); border-radius:14px;
+  box-shadow:inset 0 0 30px rgba(0,0,0,.35);
+  max-height:2000px; overflow:hidden;
+}
+.rules-block{ margin-bottom:16px; }
+.rules-block h4{
+  margin:0 0 5px; font-family:'Marcellus',serif; font-size:.94rem; color:var(--gold-bright);
+  display:flex; align-items:center; gap:9px; letter-spacing:.02em;
+}
+.rules-block .rn{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:20px; height:20px; border-radius:50%; flex:0 0 auto;
+  background:linear-gradient(160deg, var(--gold-bright), var(--gold));
+  color:#241404; font-size:.72rem; font-weight:700; font-family:'Lora',serif;
+}
+.rules-block p{
+  margin:0; padding-left:29px; font-size:.85rem; line-height:1.65; color:var(--cream-deep); opacity:.92;
+}
+.rules-block p b{color:var(--gold-soft); font-weight:700;}
+
+/* ---------- Divider "atau" & Panel Main Online ---------- */
+.or-divider{
+  display:flex; align-items:center; gap:12px; margin:20px 0; color:#8a7355; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+}
+.or-divider::before, .or-divider::after{content:''; flex:1; height:1px; background:linear-gradient(90deg, transparent, rgba(201,166,70,.4), transparent);}
+
+.online-hint{ font-size:.82rem; line-height:1.55; color:var(--cream-deep); opacity:.85; margin:0 0 14px; }
+.online-hint b{color:var(--gold-soft);}
+.online-tabs{ display:flex; gap:8px; margin-bottom:16px; }
+.online-tab{
+  flex:1; padding:9px 0; text-align:center; border-radius:9px; border:1.5px solid rgba(201,166,70,.4);
+  background:rgba(255,255,255,.05); color:var(--cream-deep); font-size:.86rem; font-weight:600; cursor:pointer;
+  font-family:'Lora',serif; transition:all .15s;
+}
+.online-tab.active{ background:linear-gradient(160deg, var(--gold-bright), var(--gold)); color:#241404; border-color:var(--gold-bright); }
+.online-sub input{
+  width:100%; padding:12px 14px; font-size:.98rem; font-family:'Lora',serif;
+  border-radius:9px; border:1px solid var(--gold); background:#1f130b; color:var(--cream); outline:none;
+}
+.online-sub input::placeholder{color:#7a6a52;}
+
+.room-code-box{
+  margin-top:16px; text-align:center; padding:16px; border-radius:12px;
+  background:rgba(0,0,0,.3); border:1px dashed rgba(201,166,70,.5);
+}
+.room-code-label{font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); opacity:.85;}
+.room-code{
+  font-family:'Marcellus',serif; font-size:2rem; letter-spacing:.18em; color:var(--gold-bright);
+  margin:6px 0; text-shadow:0 0 16px rgba(230,200,105,.3); word-break:break-all;
+}
+.net-status{ font-size:.82rem; color:var(--cream-deep); opacity:.85; min-height:1.2em; }
+.net-status.err{ color:#e2985a; }
+.net-status.ok{ color:#9fd17a; }
+
+.net-badge{
+  font-size:.72rem; padding:5px 12px; border-radius:20px; letter-spacing:.03em;
+  background:linear-gradient(160deg,#3a2414,#2a1810); border:1px solid rgba(201,166,70,.5); color:var(--gold-soft);
+  display:flex; align-items:center; gap:5px; white-space:nowrap;
+}
+.net-badge.ok{border-color:#9fd17a; color:#c3e8a8;}
+.net-badge.err{border-color:#e2985a; color:#f0b884;}
+.net-badge.wait{color:var(--gold-soft);}
+
+/* ---------- GAME SCREEN ---------- */
+#game-screen{display:flex; flex-direction:column; gap:16px;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+}
+.app-name{font-family:'Marcellus',serif; color:var(--gold-bright); letter-spacing:.1em; font-size:1.3rem;}
+.turn-banner{
+  flex:1; text-align:center; font-family:'Marcellus',serif; letter-spacing:.04em;
+  font-size:1.05rem; padding:9px 14px; border-radius:30px;
+  background:linear-gradient(160deg,#3a2414,#2a1810); border:1px solid var(--gold);
+  color:var(--cream);
+}
+.turn-banner.computer{color:#e6b9a0;}
+.btn-home{
+  background:linear-gradient(160deg,#4a3018,#2a1810); border:1px solid var(--gold);
+  color:var(--gold-bright); padding:9px 16px; border-radius:30px; font-size:.88rem;
+  display:flex; align-items:center; gap:6px;
+}
+.btn-home:hover{background:#3a2414;}
+
+/* board */
+.board-wrap{
+  background:linear-gradient(170deg, #6b4226, #4a2c16 55%, #3a2010);
+  border-radius:26px; border:3px solid var(--gold);
+  box-shadow:0 26px 60px var(--shadow), inset 0 0 0 6px rgba(0,0,0,.18), inset 0 0 40px rgba(0,0,0,.3);
+  padding:22px;
+  position:relative;
+}
+.board-grid{
+  display:grid;
+  grid-template-columns: 1.15fr repeat(7, 1fr) 1.15fr;
+  grid-template-rows: 1fr 1fr;
+  gap:10px;
+  position:relative;
+  width:100%;
+}
+.hole{
+  background:radial-gradient(circle at 35% 30%, #3a2414, #1a0f08 75%);
+  border-radius:50%;
+  aspect-ratio:1/1;
+  display:flex; align-items:center; justify-content:center; position:relative;
+  box-shadow:inset 0 6px 14px rgba(0,0,0,.6), inset 0 -3px 6px rgba(255,255,255,.04), 0 2px 0 rgba(255,255,255,.04);
+  border:1px solid rgba(201,166,70,.25);
+  cursor:default;
+  transition:box-shadow .2s, transform .12s;
+}
+.hole.playable{cursor:pointer;}
+.hole.playable:hover{box-shadow:inset 0 6px 14px rgba(0,0,0,.6), 0 0 0 3px rgba(230,200,105,.55);}
+.hole.active-drop{box-shadow:inset 0 6px 14px rgba(0,0,0,.6), 0 0 0 4px rgba(230,200,105,.9); transform:scale(1.06);}
+.lumbung{
+  grid-row:1/3;
+  background:radial-gradient(circle at 35% 30%, #4a2c16, #1a0f08 75%);
+  border-radius:22px;
+  display:flex; flex-direction:column; align-items:center; padding:16px 6px 12px;
+  box-shadow:inset 0 8px 18px rgba(0,0,0,.6), 0 2px 0 rgba(255,255,255,.04);
+  border:2px solid var(--gold);
+  position:relative;
+}
+.lumbung.active-drop{box-shadow:inset 0 8px 18px rgba(0,0,0,.6), 0 0 0 4px rgba(230,200,105,.9);}
+.lumbung-label{font-size:.66rem; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); opacity:.9; flex:0 0 auto; text-align:center;}
+.lumbung-seedzone{position:relative; flex:1 1 auto; width:100%; min-height:38px; margin:6px 0;}
+.lumbung-seedzone .seed-cluster{position:absolute; inset:4%;}
+.lumbung-count-badge{
+  flex:0 0 auto; font-family:'Marcellus',serif; font-size:1.25rem; color:var(--gold-bright);
+  background:rgba(10,6,3,.6); border:1px solid var(--gold); border-radius:14px;
+  padding:2px 16px; box-shadow:0 3px 8px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
+}
+.seed-cluster{
+  position:absolute; inset:12%;
+}
+.seed{
+  position:absolute; left:0; top:0;
+  width:9px;height:11px;border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+  background:radial-gradient(circle at 35% 30%, #c98a55, var(--clay) 70%, var(--clay-dark));
+  box-shadow:inset 0 -1px 2px rgba(0,0,0,.35), 0 1px 2px rgba(0,0,0,.3);
+  transform:translate(-50%,-50%);
+}
+.lumbung .seed{width:8px; height:10px;}
+.hole-count{
+  position:absolute; bottom:2px; right:4px; font-family:'Marcellus',serif; font-size:.78rem;
+  color:var(--gold-bright); background:rgba(0,0,0,.4); border-radius:8px; padding:0 5px; line-height:1.4;
+}
+
+/* control panels */
+.panels{display:flex; flex-direction:column; gap:14px;}
+.panel-toggles{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
+.toggle-btn{
+  background:linear-gradient(160deg,#4a3018,#2a1810); border:1px solid var(--gold);
+  color:var(--cream); padding:8px 14px; border-radius:20px; font-size:.82rem; letter-spacing:.03em;
+  display:flex; align-items:center; gap:6px;
+}
+.toggle-btn:hover{background:#3a2414;}
+.toggle-btn.on{background:linear-gradient(160deg, var(--gold-bright), var(--gold)); color:#241404;}
+
+.panel{
+  position:relative; overflow:hidden;
+  background:
+    repeating-linear-gradient(105deg, rgba(0,0,0,.12) 0px, rgba(0,0,0,.12) 1.5px, transparent 1.5px, transparent 8px),
+    linear-gradient(170deg, #4c2e17, #33200f 55%, #271609);
+  border-radius:16px; border:1px solid var(--gold);
+  box-shadow:0 14px 30px var(--shadow), inset 0 0 0 1px rgba(201,166,70,.12), inset 0 0 34px rgba(0,0,0,.4);
+  padding:20px 22px 22px; color:var(--cream-deep);
+}
+.panel h3{
+  font-family:'Marcellus',serif; margin:0 0 6px; font-size:1.02rem; letter-spacing:.04em; color:var(--gold-bright);
+  display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+  text-shadow:0 1px 0 rgba(0,0,0,.5);
+}
+.panel h3::after{
+  content:''; display:block; height:1px; margin-top:10px; margin-bottom:6px;
+  background:linear-gradient(90deg, var(--gold), transparent 70%);
+  flex-basis:100%;
+}
+.speed-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+.speed-option{
+  padding:9px 16px; border-radius:10px; border:1.5px solid rgba(201,166,70,.55); cursor:pointer;
+  font-size:.88rem; font-weight:600; color:var(--cream-deep); background:rgba(255,255,255,.06);
+  transition:all .15s;
+}
+.speed-option:hover{background:rgba(255,255,255,.12);}
+.speed-option.active{background:linear-gradient(160deg, var(--gold-bright), var(--gold)); color:#241404; border-color:var(--gold-bright); box-shadow:0 4px 10px rgba(0,0,0,.35);}
+.speed-hint{font-size:.78rem; color:#c3ac86; margin-top:10px; font-style:italic;}
+
+.sim-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:10px;}
+.sim-card{
+  background:rgba(255,255,255,.06); border:1px solid rgba(201,166,70,.3); border-radius:12px;
+  padding:10px 12px; font-size:.83rem;
+}
+.sim-card .pit{font-family:'Marcellus',serif; font-size:1rem; color:var(--gold-bright); margin-bottom:4px;}
+.sim-card .row{display:flex; justify-content:space-between; margin-top:3px;}
+.sim-card .extra{color:#9fd17a; font-weight:700;}
+.sim-card .noextra{color:#b39a76;}
+.sim-card.sim-capture{border-color:#e2985a; background:rgba(226,152,90,.12);}
+.sim-card .capture-flag{
+  margin-top:6px; padding-top:6px; border-top:1px dashed rgba(226,152,90,.4);
+  color:#f0b884; font-weight:700; justify-content:flex-start; gap:6px;
+}
+.sim-empty{font-size:.85rem; color:#c3ac86; font-style:italic;}
+.sim-note{font-size:.76rem; color:#c3ac86; margin-top:10px; line-height:1.5;}
+
+/* end game modal */
+.modal-back{
+  position:fixed; inset:0; background:rgba(15,8,4,.72); display:flex; align-items:center; justify-content:center; z-index:50;
+}
+.modal-card{
+  background:linear-gradient(160deg,#3a2414,#2a1810); border:1px solid var(--gold); border-radius:18px;
+  padding:40px 36px; text-align:center; max-width:420px; box-shadow:0 30px 70px var(--shadow);
+}
+.modal-card h2{font-family:'Marcellus',serif; color:var(--gold-bright); font-size:1.7rem; margin:0 0 10px;}
+.modal-card p{color:var(--cream-deep); margin:6px 0; font-size:.95rem;}
+.modal-actions{display:flex; gap:10px; margin-top:22px;}
+.btn-secondary{
+  flex:1; background:transparent; border:1px solid var(--gold); color:var(--gold-bright); padding:12px 0; border-radius:10px;
+}
+.btn-secondary:hover{background:rgba(201,166,70,.1);}
+
+@media (max-width:720px){
+  h1.title{font-size:2.1rem;}
+  .board-wrap{padding:12px; border-radius:20px;}
+  .board-grid{gap:5px;}
+  .hole-count{font-size:.62rem; padding:0 3px;}
+  .lumbung-count-badge{font-size:.95rem; padding:1px 8px;}
+  .lumbung-label{font-size:.56rem;}
+  .panel{padding:14px 16px;}
+  .seed{width:6.5px; height:8px;}
+  .lumbung .seed{width:5.5px; height:7px;}
+}
+@media (max-width:420px){
+  #start-screen .card{padding:34px 20px 30px;}
+  h1.title{font-size:1.7rem;}
+  .board-wrap{padding:8px; border-radius:16px;}
+  .board-grid{gap:3px;}
+  .lumbung{padding:8px 3px 8px; border-radius:14px;}
+  .lumbung-label{font-size:.5rem;}
+  .lumbung-count-badge{font-size:.8rem; padding:1px 6px; border-radius:10px;}
+  .hole-count{font-size:.56rem; bottom:1px; right:2px;}
+  .seed{width:5px; height:6.5px;}
+  .lumbung .seed{width:4.5px; height:5.5px;}
+  .rules-block p{padding-left:0; margin-top:2px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ START SCREEN ============ -->
+<div class="screen" id="start-screen">
+  <div class="card">
+    <h1 class="title">CONGXION</h1>
+    <div class="subtitle">Congklak Conexion, Pengembangan Congklak Etnomatematika</div>
+    <div class="flow-divider">
+      <svg width="180" height="26" viewBox="0 0 180 26" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,13 C40,2 60,24 90,13 C120,2 140,24 180,13" fill="none" stroke="#c9a646" stroke-width="1.2" opacity=".7"/>
+        <path transform="translate(84,9) rotate(-20) scale(0.55)" d="M0,0 C4,-16 22,-18 30,0 C22,18 4,16 0,0 Z" fill="#c9a646" opacity=".85"/>
+        <text x="97" y="12" font-family="Georgia,serif" font-size="7" fill="#3a2010" opacity=".55" text-anchor="middle">&#215;</text>
+      </svg>
+    </div>
+    <label class="field-label" for="player-name-a">Nama Pemain 1</label>
+    <input id="player-name-a" type="text" placeholder="Tulis nama Pemain 1..." maxlength="18" autocomplete="off">
+    <label class="field-label" for="player-name-b" style="margin-top:14px;">Nama Pemain 2</label>
+    <input id="player-name-b" type="text" placeholder="Tulis nama Pemain 2..." maxlength="18" autocomplete="off">
+
+    <button class="btn btn-rules" id="btn-rules" aria-expanded="false" aria-controls="rules-panel">
+      <span class="btn-rules-ic">📜</span><span class="btn-rules-label">Lihat Aturan Permainan Lengkap</span>
+      <span class="btn-rules-chev"></span>
+    </button>
+
+    <div class="rules-panel hidden" id="rules-panel">
+      <div class="rules-block">
+        <h4><span class="rn">1</span> Tujuan Permainan</h4>
+        <p>Congxion dimainkan oleh dua pemain. Pemenangnya adalah pemain yang berhasil mengumpulkan <b>biji terbanyak di lumbung (rumah) miliknya sendiri</b> pada akhir permainan.</p>
+      </div>
+      <div class="rules-block">
+        <h4><span class="rn">2</span> Papan &amp; Susunan Awal</h4>
+        <p>Papan terdiri dari <b>14 lubang kecil</b> (7 lubang milik tiap pemain, berhadap-hadapan) dan <b>2 lumbung besar</b> di sisi kiri &amp; kanan sebagai rumah masing-masing pemain. Setiap lubang kecil diisi <b>7 biji</b> di awal permainan (total 98 biji di papan), sedangkan kedua lumbung dimulai dalam keadaan kosong.</p>
+      </div>
+      <div class="rules-block">
+        <h4><span class="rn">3</span> Cara Berjalan</h4>
+        <p>Pada gilirannya, pemain memilih salah satu lubang miliknya sendiri yang <b>tidak kosong</b>, lalu seluruh biji di lubang itu diambil dan dibagikan satu-persatu ke lubang-lubang berikutnya secara berurutan <b>berlawanan arah jarum jam</b>, termasuk mengisi lumbung miliknya sendiri saat dilewati. <b>Lumbung milik lawan selalu dilewati</b> (tidak diisi).</p>
+      </div>
+      <div class="rules-block">
+        <h4><span class="rn">4</span> Jalan Beruntun</h4>
+        <p>Jika biji <b>terakhir</b> yang dibagikan jatuh di sebuah lubang kecil yang <b>sudah berisi biji</b> (milik sendiri maupun milik lawan), seluruh isi lubang tersebut (termasuk biji yang baru jatuh) diambil kembali dan dibagikan lagi meneruskan arah jalan — begitu seterusnya hingga biji terakhir jatuh di lumbung sendiri, lubang kosong, atau lubang lawan yang kosong.</p>
+      </div>
+      <div class="rules-block">
+        <h4><span class="rn">5</span> Giliran Tambahan</h4>
+        <p>Jika biji <b>terakhir</b> jatuh tepat di <b>lumbung milik sendiri</b>, pemain tersebut mendapat <b>giliran jalan tambahan</b> (boleh memilih lubang mana pun miliknya untuk berjalan lagi).</p>
+      </div>
+      <div class="rules-block">
+        <h4><span class="rn">6</span> Aturan Menembak</h4>
+        <p>Jika biji <b>terakhir</b> jatuh di lubang <b>milik sendiri yang sebelumnya kosong</b>, pemain tersebut berhak "menembak": seluruh biji di lubang <b>lawan yang berhadapan tepat di seberangnya</b> ditambah biji yang baru jatuh tadi, semuanya masuk ke lumbung milik pemain tersebut. Setelah menembak, <b>giliran langsung berpindah ke lawan</b>.</p>
+      </div>
+      <div class="rules-block">
+        <h4><span class="rn">7</span> Akhir Permainan</h4>
+        <p>Permainan berakhir ketika <b>seluruh lubang kecil di salah satu sisi pemain kosong</b>. Sisa biji yang masih ada di lubang-lubang milik pemain lain (yang belum kosong) otomatis disapu masuk ke lumbung pemiliknya masing-masing. Pemain dengan <b>jumlah biji terbanyak di lumbungnya</b> dinyatakan menang; jika sama banyak, permainan berakhir <b>seri</b>.</p>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" id="btn-play" style="margin-top:22px;">Mulai Bermain (1 HP)</button>
+
+    <div class="or-divider"><span>atau</span></div>
+
+    <button class="btn btn-rules" id="btn-online-toggle" aria-expanded="false" aria-controls="online-panel">
+      <span class="btn-rules-ic">🌐</span><span class="btn-rules-label">Main Online (2 Device)</span>
+      <span class="btn-rules-chev"></span>
+    </button>
+
+    <div class="rules-panel hidden" id="online-panel">
+      <div class="online-tabs">
+        <button class="online-tab active" id="tab-host" data-tab="host">Buat Room</button>
+        <button class="online-tab" id="tab-join" data-tab="join">Gabung Room</button>
+      </div>
+
+      <div class="online-sub" id="online-host-sub">
+        <p class="online-hint">Anda menjadi <b>Pemain 1</b>. Bagikan kode room ke teman Anda supaya ia bisa bergabung dari HP-nya sendiri.</p>
+        <label class="field-label" for="net-name-host">Nama Anda</label>
+        <input id="net-name-host" type="text" placeholder="Nama Anda..." maxlength="18" autocomplete="off">
+        <button class="btn btn-primary" id="btn-create-room" style="margin-top:12px;">Buat Room</button>
+        <div class="room-code-box hidden" id="room-code-box">
+          <div class="room-code-label">Kode Room Anda</div>
+          <div class="room-code" id="room-code-display">-----</div>
+          <div class="net-status" id="net-status-host"></div>
+        </div>
+      </div>
+
+      <div class="online-sub hidden" id="online-join-sub">
+        <p class="online-hint">Anda menjadi <b>Pemain 2</b>. Minta kode room dari teman yang sudah membuat room, lalu masukkan di bawah ini.</p>
+        <label class="field-label" for="net-name-join">Nama Anda</label>
+        <input id="net-name-join" type="text" placeholder="Nama Anda..." maxlength="18" autocomplete="off">
+        <label class="field-label" for="net-room-input" style="margin-top:12px;">Kode Room</label>
+        <input id="net-room-input" type="text" placeholder="Contoh: A3K9P" maxlength="8" autocomplete="off" style="text-transform:uppercase;">
+        <button class="btn btn-primary" id="btn-join-room" style="margin-top:12px;">Gabung ke Room</button>
+        <div class="net-status" id="net-status-join"></div>
+      </div>
+    </div>
+
+    <div class="maker">Dibuat oleh <b>Jaki Kurniawan</b></div>
+  </div>
+</div>
+
+<!-- ============ GAME SCREEN ============ -->
+<div class="screen hidden" id="game-screen">
+  <div class="topbar">
+    <div class="app-name">CONGXION</div>
+    <div class="net-badge hidden" id="net-badge"></div>
+    <div class="turn-banner" id="turn-banner">Giliran Anda</div>
+    <button class="btn btn-home" id="btn-home">🏠 Home</button>
+  </div>
+
+  <div class="board-wrap">
+    <div class="board-grid" id="board-grid"></div>
+  </div>
+
+  <div class="panels">
+    <div class="panel-toggles">
+      <button class="toggle-btn" id="toggle-speed">⚡ Kontrol Kecepatan</button>
+      <button class="toggle-btn" id="toggle-sim">🧮 Simulator Strategi</button>
+    </div>
+
+    <div class="panel hidden" id="panel-speed">
+      <h3>⚡ Kecepatan Permainan</h3>
+      <div class="speed-row">
+        <div class="speed-option" data-speed="slow">Lambat</div>
+        <div class="speed-option active" data-speed="fast">Cepat</div>
+        <div class="speed-option" data-speed="instant">Langsung Hasil</div>
+      </div>
+      <div class="speed-hint">Atur seberapa cepat biji berputar saat dibagikan ke setiap lubang.</div>
+    </div>
+
+    <div class="panel hidden" id="panel-sim">
+      <h3>🧮 Simulator Strategi Matematika</h3>
+      <div class="sim-grid" id="sim-grid"></div>
+      <div class="sim-note">Simulasi menghitung hasil setiap kemungkinan langkah dari lubang Anda secara matematis — termasuk efek "jalan beruntun" (biji terakhir jatuh di lubang berisi, sebaran berlanjut) dan efek "menembak" (biji terakhir jatuh di lubang sendiri yang kosong, seluruh isi lubang lawan di seberangnya ikut masuk ke lumbung Anda) — tanpa benar-benar menjalankan langkah tersebut. Gunakan untuk memprediksi langkah mana yang paling menguntungkan.</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back hidden" id="modal-back">
+  <div class="modal-card">
+    <h2 id="modal-title">Permainan Selesai</h2>
+    <p id="modal-body"></p>
+    <div class="modal-actions">
+      <button class="btn-secondary" id="modal-rematch">Main Lagi</button>
+      <button class="btn-secondary" id="modal-home">Ke Menu Awal</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.2/dist/peerjs.min.js"></script>
+<script>
+/* ============================================================
+   CONGXION — Logika Congklak
+   16 posisi melingkar (indeks 0..15), arah putar ke kiri (counter-clockwise):
+   0..6   = lubang A1..A7   (pemain manusia / bawah)
+   7      = Lumbung A
+   8..14  = lubang B1..B7   (komputer / atas)
+   15     = Lumbung B
+   ============================================================ */
+
+const TOTAL = 16;
+const A_HOLES = [0,1,2,3,4,5,6];
+const B_HOLES = [8,9,10,11,12,13,14];
+const A_LUMBUNG = 7;
+const B_LUMBUNG = 15;
+
+let board = [];        // panjang 16
+let currentPlayer = 'A'; // 'A' atau 'B'
+let playerNameA = 'Pemain 1';
+let playerNameB = 'Pemain 2';
+let speedMode = 'fast'; // slow | fast | instant
+let busy = false;       // mengunci klik selagi animasi berjalan
+let showSpeed = false;
+let showSim = false;
+
+/* ---------------- MODE ONLINE (2 HP, peer-to-peer) ----------------
+   Tidak mengubah aturan/logika permainan sama sekali — simulateMove()
+   dan checkGameEnd() tetap 100% sama, hanya hasilnya dikirim lewat
+   jaringan supaya kedua HP menampilkan papan yang identik. */
+let netMode = 'local';  // 'local' | 'host' | 'guest'
+let myRole  = 'A';      // peran pemain di perangkat ini saat online
+let peer = null;
+let conn = null;
+
+function nameOf(player){ return player==='A' ? playerNameA : playerNameB; }
+
+function freshBoard(){
+  const b = new Array(TOTAL).fill(0);
+  A_HOLES.forEach(i=>b[i]=7);
+  B_HOLES.forEach(i=>b[i]=7);
+  b[A_LUMBUNG]=0; b[B_LUMBUNG]=0;
+  return b;
+}
+
+function isSmallHole(p){ return p!==A_LUMBUNG && p!==B_LUMBUNG; }
+function ownLumbung(player){ return player==='A'?A_LUMBUNG:B_LUMBUNG; }
+function oppLumbung(player){ return player==='A'?B_LUMBUNG:A_LUMBUNG; }
+function ownHoles(player){ return player==='A'?A_HOLES:B_HOLES; }
+// lubang tepat di seberang (kolom yang sama secara visual) — dipakai untuk aturan "menembak"
+function oppositeHole(p){ return 14 - p; }
+
+function nextIndex(pos, player){
+  let n = (pos+1)%TOTAL;
+  if(n === oppLumbung(player)) n = (n+1)%TOTAL;
+  return n;
+}
+
+// Simulasi penuh satu langkah dari posisi awal "start", mengembalikan board baru + urutan event + apakah dapat giliran tambahan
+function simulateMove(srcBoard, player, start){
+  const b = srcBoard.slice();
+  const events = [];
+  let pos = start;
+  let seeds = b[pos]; b[pos]=0;
+  events.push({type:'pickup', pos});
+  while(true){
+    while(seeds>0){
+      pos = nextIndex(pos, player);
+      b[pos]+=1;
+      seeds--;
+      events.push({type:'drop', pos, value:b[pos]});
+    }
+    if(isSmallHole(pos) && b[pos]>1){
+      seeds = b[pos]; b[pos]=0;
+      events.push({type:'pickup', pos});
+      continue;
+    }
+    // --- ATURAN TEMBAK: biji terakhir jatuh di lubang milik sendiri yang tadinya kosong ---
+    if(isSmallHole(pos) && b[pos]===1 && ownHoles(player).includes(pos)){
+      const oppPos = oppositeHole(pos);
+      if(b[oppPos] > 0){
+        const gained = b[pos] + b[oppPos];
+        b[pos] = 0;
+        b[oppPos] = 0;
+        b[ownLumbung(player)] += gained;
+        events.push({type:'capture', pos, oppPos, lumbung:ownLumbung(player), gained});
+      }
+    }
+    break;
+  }
+  const extraTurn = (pos === ownLumbung(player));
+  return {board:b, events, extraTurn, lastPos:pos};
+}
+
+/* ---------------- ORNAMEN SULUR-DAUN: mengalir, organik, sedikit asimetris ----------------
+   Ditempatkan menyatu di tepi atas (kiri besar → kanan mengecil), bukan ditempel
+   sebagai ikon terpisah di tiap sudut. Murni dekoratif, tidak menyentuh logika game. */
+const VINE_TL_SVG = `<svg viewBox="0 0 150 100" xmlns="http://www.w3.org/2000/svg">
+  <defs><linearGradient id="vtlGrad" x1="0" y1="1" x2="1" y2="0">
+    <stop offset="0" stop-color="#8a5c2e"/><stop offset="1" stop-color="#e6c869"/>
+  </linearGradient></defs>
+  <path d="M6,96 C10,60 26,42 50,36 C76,30 86,16 96,4" fill="none" stroke="#c9a646" stroke-width="2.2" stroke-linecap="round" opacity=".8"/>
+  <g fill="url(#vtlGrad)" stroke="#4a2c16" stroke-width=".6">
+    <path transform="translate(16,80) rotate(-52) scale(1.25)" d="M0,0 C4,-16 22,-18 30,0 C22,18 4,16 0,0 Z"/>
+    <path transform="translate(42,54) rotate(-30) scale(1.0)" d="M0,0 C4,-16 22,-18 30,0 C22,18 4,16 0,0 Z"/>
+    <path transform="translate(68,32) rotate(-14) scale(0.78)" d="M0,0 C4,-16 22,-18 30,0 C22,18 4,16 0,0 Z"/>
+    <path transform="translate(92,12) rotate(6) scale(0.52)" d="M0,0 C4,-16 22,-18 30,0 C22,18 4,16 0,0 Z"/>
+  </g>
+  <text x="26" y="76" font-family="Georgia,serif" font-size="9" fill="#3a2010" opacity=".55" text-anchor="middle">&#966;</text>
+  <text x="50" y="51" font-family="Georgia,serif" font-size="7.5" fill="#3a2010" opacity=".5" text-anchor="middle">&#960;</text>
+  <text x="74" y="29" font-family="Georgia,serif" font-size="6" fill="#3a2010" opacity=".45" text-anchor="middle">&#8734;</text>
+  <g fill="#e6c869" opacity=".9">
+    <circle cx="29" cy="60" r="2.3"/><circle cx="24" cy="55" r="1.8"/>
+    <circle cx="34" cy="54" r="1.8"/><circle cx="29" cy="50" r="2"/>
+  </g>
+  <!-- spiral emas: jejak fibonacci sebagai aksen matematis -->
+  <path d="M108,16 a3,3 0 0 1 3,-3 a3,3 0 0 1 3,3 a6,6 0 0 1 -6,6 a9,9 0 0 1 -9,-9 a15,15 0 0 1 15,-15"
+        fill="none" stroke="#c9a646" stroke-width="1" opacity=".55" stroke-linecap="round"/>
+</svg>`;
+
+const VINE_TR_SVG = `<svg viewBox="0 0 110 76" xmlns="http://www.w3.org/2000/svg">
+  <defs><linearGradient id="vtrGrad" x1="0" y1="1" x2="1" y2="0">
+    <stop offset="0" stop-color="#8a5c2e"/><stop offset="1" stop-color="#e6c869"/>
+  </linearGradient></defs>
+  <path d="M5,72 C10,46 24,30 42,25 C58,20 66,10 74,3" fill="none" stroke="#c9a646" stroke-width="2" stroke-linecap="round" opacity=".75"/>
+  <g fill="url(#vtrGrad)" stroke="#4a2c16" stroke-width=".55">
+    <path transform="translate(14,58) rotate(-50) scale(1.0)" d="M0,0 C4,-16 22,-18 30,0 C22,18 4,16 0,0 Z"/>
+    <path transform="translate(38,34) rotate(-24) scale(0.72)" d="M0,0 C4,-16 22,-18 30,0 C22,18 4,16 0,0 Z"/>
+    <path transform="translate(64,10) rotate(2) scale(0.46)" d="M0,0 C4,-16 22,-18 30,0 C22,18 4,16 0,0 Z"/>
+  </g>
+  <text x="22" y="54" font-family="Georgia,serif" font-size="7.5" fill="#3a2010" opacity=".5" text-anchor="middle">&#931;</text>
+  <text x="46" y="30" font-family="Georgia,serif" font-size="6" fill="#3a2010" opacity=".45" text-anchor="middle">&#8730;</text>
+  <g fill="#e6c869" opacity=".85">
+    <circle cx="24" cy="40" r="1.8"/><circle cx="20" cy="36" r="1.4"/><circle cx="28" cy="35" r="1.4"/>
+  </g>
+</svg>`;
+
+function addVineOrnament(el){
+  if(!el || el.dataset.vined) return;
+  el.dataset.vined = '1';
+  const tl = document.createElement('div');
+  tl.className = 'vine-corner vine-tl';
+  tl.innerHTML = VINE_TL_SVG;
+  const tr = document.createElement('div');
+  tr.className = 'vine-corner vine-tr';
+  tr.innerHTML = VINE_TR_SVG;
+  el.appendChild(tl);
+  el.appendChild(tr);
+}
+
+function applyOrnaments(){
+  addVineOrnament(document.querySelector('#start-screen .card'));
+  addVineOrnament(document.querySelector('.board-wrap'));
+}
+applyOrnaments();
+
+/* ---------------- RENDER ---------------- */
+const boardGrid = document.getElementById('board-grid');
+
+// definisikan tata letak grid: kolom 1 = lumbung A, kolom 2-8 = 7 lubang, kolom 9 = lumbung B
+// Tata letak ini sengaja dicerminkan (mirror) dari versi sebelumnya: dengan lumbung A
+// di kiri dan lumbung B di kanan, urutan indeks 0->1->2...->6 (yang logikanya tetap sama)
+// kini bergerak secara VISUAL ke kiri, sesuai arah congklak yang sebenarnya.
+// Logika simulateMove/nextIndex TIDAK diubah — hanya posisi render yang dicerminkan.
+const topOrder = [8,9,10,11,12,13,14];    // B1..B7, kiri ke kanan
+const bottomOrder = [6,5,4,3,2,1,0];      // A7..A1, kiri ke kanan (A1 di paling kanan)
+
+function buildBoardDOM(){
+  boardGrid.innerHTML = '';
+
+  const lumA = document.createElement('div');
+  lumA.className='lumbung'; lumA.id='cell-7';
+  lumA.style.gridColumn='1'; lumA.style.gridRow='1/3';
+  lumA.innerHTML = `<div class="lumbung-label" id="lumA-label">Lumbung</div><div class="lumbung-seedzone"><div class="seed-cluster" id="seeds-7"></div></div><div class="lumbung-count-badge" id="count-7">0</div>`;
+  boardGrid.appendChild(lumA);
+
+  topOrder.forEach((idx,i)=>{
+    const cell=document.createElement('div');
+    cell.className='hole'; cell.id='cell-'+idx;
+    cell.style.gridColumn=(i+2); cell.style.gridRow='1';
+    cell.innerHTML=`<div class="seed-cluster" id="seeds-${idx}"></div><div class="hole-count" id="count-${idx}">7</div>`;
+    boardGrid.appendChild(cell);
+    cell.addEventListener('click', ()=>onHoleClick(idx));
+  });
+
+  bottomOrder.forEach((idx,i)=>{
+    const cell=document.createElement('div');
+    cell.className='hole'; cell.id='cell-'+idx;
+    cell.style.gridColumn=(i+2); cell.style.gridRow='2';
+    cell.innerHTML=`<div class="seed-cluster" id="seeds-${idx}"></div><div class="hole-count" id="count-${idx}">7</div>`;
+    boardGrid.appendChild(cell);
+    cell.addEventListener('click', ()=>onHoleClick(idx));
+  });
+
+  const lumB = document.createElement('div');
+  lumB.className='lumbung'; lumB.id='cell-15';
+  lumB.style.gridColumn='9'; lumB.style.gridRow='1/3';
+  lumB.innerHTML = `<div class="lumbung-label" id="lumB-label">Lumbung</div><div class="lumbung-seedzone"><div class="seed-cluster" id="seeds-15"></div></div><div class="lumbung-count-badge" id="count-15">0</div>`;
+  boardGrid.appendChild(lumB);
+}
+
+/* ---------------- TATA LETAK BIJI: konsep "dadu" (dice pips) ----------------
+   1–9 biji ditata seperti mata dadu (bukan berjejer rapi kotak).
+   Lebih dari 9 biji, sisanya "berkumpul di tengah" mengikuti pola cincin
+   melingkar konsentris (bukan spiral acak) — rapi meski saling tumpuk. */
+const DICE_PIPS = {
+  1:[[50,50]],
+  2:[[32,32],[68,68]],
+  3:[[30,30],[50,50],[70,70]],
+  4:[[30,30],[70,30],[30,70],[70,70]],
+  5:[[30,30],[70,30],[50,50],[30,70],[70,70]],
+  6:[[30,24],[70,24],[30,50],[70,50],[30,76],[70,76]],
+  7:[[30,24],[70,24],[30,50],[50,50],[70,50],[30,76],[70,76]],
+  8:[[30,20],[50,20],[70,20],[30,50],[70,50],[30,80],[50,80],[70,80]],
+  9:[[30,20],[50,20],[70,20],[30,50],[50,50],[70,50],[30,80],[50,80],[70,80]],
+};
+
+// posisi cincin ke-i (i mulai dari 0) di luar 9 biji pertama: cincin heksagonal
+// berpusat (1, 6, 12, 18, 24 ...) agar biji berlebih tetap rapi berkumpul di tengah.
+function ringPosition(i){
+  let ring=1, capacity=6, cumBefore=0;
+  while(i >= cumBefore+capacity){ cumBefore+=capacity; ring++; capacity=6*ring; }
+  const posInRing = i-cumBefore;
+  const angle = (360/capacity)*posInRing + ring*18; // offset tiap cincin biar tidak sejajar lurus
+  const radius = Math.min(15*ring, 34); // tetap mengumpul, tidak melebar keluar lubang
+  const rad = angle*(Math.PI/180);
+  return { x:50+Math.cos(rad)*radius, y:50+Math.sin(rad)*radius };
+}
+
+function renderSeeds(container, count){
+  container.innerHTML='';
+  if(count<=0) return;
+
+  const outer = Math.min(count, 9);
+  const layout = DICE_PIPS[outer];
+  for(let i=0;i<outer;i++){
+    placeSeed(container, layout[i][0], layout[i][1]);
+  }
+
+  if(count>9){
+    const extra = Math.min(count-9, 80); // batasi render demi performa
+    for(let i=0;i<extra;i++){
+      const p = ringPosition(i);
+      placeSeed(container, p.x, p.y, true);
+    }
+  }
+}
+
+function placeSeed(container, xPct, yPct, isExtra){
+  const s = document.createElement('div');
+  s.className = 'seed';
+  s.style.left = xPct+'%';
+  s.style.top = yPct+'%';
+  if(isExtra){ s.style.transform = 'translate(-50%,-50%) scale(.88)'; }
+  container.appendChild(s);
+}
+
+function renderBoard(){
+  for(let i=0;i<TOTAL;i++){
+    const countEl = document.getElementById('count-'+i);
+    const seedsEl = document.getElementById('seeds-'+i);
+    if(countEl) countEl.textContent = board[i];
+    if(seedsEl) renderSeeds(seedsEl, board[i]);
+  }
+  updatePlayableHighlight();
+}
+
+function updatePlayableHighlight(){
+  A_HOLES.concat(B_HOLES).forEach(idx=>{
+    const cell = document.getElementById('cell-'+idx);
+    if(!cell) return;
+    const ownedByCurrent = ownHoles(currentPlayer).includes(idx);
+    const iAmAllowedToAct = (netMode==='local') || (currentPlayer===myRole);
+    const can = ownedByCurrent && !busy && board[idx]>0 && iAmAllowedToAct;
+    cell.classList.toggle('playable', can);
+  });
+}
+
+function flashCell(idx){
+  const cell = document.getElementById('cell-'+idx);
+  cell.classList.add('active-drop');
+  setTimeout(()=>cell.classList.remove('active-drop'), 180);
+}
+
+function setTurnBanner(){
+  const banner = document.getElementById('turn-banner');
+  banner.textContent = `Giliran ${nameOf(currentPlayer)}`;
+  banner.classList.remove('computer');
+}
+
+/* ---------------- ANIMASI LANGKAH ----------------
+   animateEvents() murni MEMUTAR animasi dari sebuah hasil simulateMove()
+   yang sudah jadi (baik dihitung lokal maupun diterima dari jaringan).
+   simulateMove() sendiri sama sekali tidak diubah/disentuh. */
+function stepDelay(){
+  if(speedMode==='instant') return 0;
+  if(speedMode==='slow') return 380;
+  return 130; // fast
+}
+
+async function animateEvents(events, finalBoard){
+  if(speedMode==='instant'){
+    board = finalBoard;
+    renderBoard();
+    return;
+  }
+  let workingBoard = board.slice();
+  for(const ev of events){
+    if(ev.type==='pickup'){
+      workingBoard[ev.pos]=0;
+      document.getElementById('count-'+ev.pos).textContent = workingBoard[ev.pos];
+      renderSeeds(document.getElementById('seeds-'+ev.pos), workingBoard[ev.pos]);
+      await sleep(stepDelay()*0.6);
+    } else if(ev.type==='capture'){
+      workingBoard[ev.pos]=0;
+      workingBoard[ev.oppPos]=0;
+      workingBoard[ev.lumbung]+=ev.gained;
+      document.getElementById('count-'+ev.pos).textContent = workingBoard[ev.pos];
+      renderSeeds(document.getElementById('seeds-'+ev.pos), workingBoard[ev.pos]);
+      document.getElementById('count-'+ev.oppPos).textContent = workingBoard[ev.oppPos];
+      renderSeeds(document.getElementById('seeds-'+ev.oppPos), workingBoard[ev.oppPos]);
+      document.getElementById('count-'+ev.lumbung).textContent = workingBoard[ev.lumbung];
+      renderSeeds(document.getElementById('seeds-'+ev.lumbung), workingBoard[ev.lumbung]);
+      flashCell(ev.pos); flashCell(ev.oppPos); flashCell(ev.lumbung);
+      await sleep(stepDelay()*1.5);
+    } else {
+      workingBoard[ev.pos] = ev.value;
+      document.getElementById('count-'+ev.pos).textContent = workingBoard[ev.pos];
+      renderSeeds(document.getElementById('seeds-'+ev.pos), workingBoard[ev.pos]);
+      flashCell(ev.pos);
+      await sleep(stepDelay());
+    }
+  }
+  board = finalBoard;
+  renderBoard();
+}
+
+function sleep(ms){ return new Promise(res=>setTimeout(res, ms)); }
+
+/* ---------------- ALUR PERMAINAN ----------------
+   performLocalMove(idx): menjalankan simulateMove() SEKALI di perangkat
+   yang berwenang (mode lokal, atau HOST — baik untuk gerakannya sendiri
+   maupun mewakili permintaan dari tamu), lalu menyiarkan hasilnya. */
+async function performLocalMove(idx){
+  if(busy) return;
+  const player = currentPlayer;
+  if(!ownHoles(player).includes(idx)) return;
+  if(board[idx]<=0) return;
+
+  busy = true; updatePlayableHighlight();
+  const result = simulateMove(board, player, idx); // <-- logika inti, tidak diubah
+  await animateEvents(result.events, result.board);
+  busy = false;
+
+  if(netMode==='host' && conn && conn.open){
+    conn.send({type:'move-result', events:result.events, board:result.board, extraTurn:result.extraTurn});
+  }
+
+  if(checkGameEnd()) return; // <-- logika inti, tidak diubah
+
+  if(!result.extraTurn){
+    currentPlayer = (player==='A') ? 'B' : 'A';
+  }
+  setTurnBanner();
+  updatePlayableHighlight();
+  renderSimulator();
+}
+
+async function onHoleClick(idx){
+  if(busy) return;
+  if(netMode!=='local' && currentPlayer!==myRole) return; // bukan giliran perangkat ini
+  if(!ownHoles(currentPlayer).includes(idx)) return;
+  if(board[idx]<=0) return;
+
+  if(netMode==='guest'){
+    // tamu tidak menghitung apa pun sendiri — cukup minta host menjalankannya,
+    // supaya hasil di kedua HP dijamin identik (host = satu-satunya sumber kebenaran).
+    if(conn && conn.open) conn.send({type:'move-request', idx});
+    return;
+  }
+  await performLocalMove(idx);
+}
+
+/* Dipanggil di sisi TAMU saat menerima hasil resmi dari host */
+async function applyRemoteMoveResult(msg){
+  busy = true;
+  await animateEvents(msg.events, msg.board);
+  busy = false;
+
+  if(checkGameEnd()) return; // fungsi murni berdasarkan `board` — hasilnya pasti identik di kedua HP
+
+  if(!msg.extraTurn){
+    currentPlayer = (currentPlayer==='A') ? 'B' : 'A';
+  }
+  setTurnBanner();
+  updatePlayableHighlight();
+  renderSimulator();
+}
+
+function checkGameEnd(){
+  const aEmpty = A_HOLES.every(i=>board[i]===0);
+  const bEmpty = B_HOLES.every(i=>board[i]===0);
+  if(!aEmpty && !bEmpty) return false;
+
+  // sapu sisa biji ke lumbung pemilik masing-masing
+  if(!aEmpty){ A_HOLES.forEach(i=>{ board[A_LUMBUNG]+=board[i]; board[i]=0; }); }
+  if(!bEmpty){ B_HOLES.forEach(i=>{ board[B_LUMBUNG]+=board[i]; board[i]=0; }); }
+  renderBoard();
+
+  const aScore = board[A_LUMBUNG], bScore=board[B_LUMBUNG];
+  let title;
+  if(aScore>bScore){ title=`🎉 ${playerNameA} Menang!`; }
+  else if(bScore>aScore){ title=`🎉 ${playerNameB} Menang!`; }
+  else { title='Seri!'; }
+  const body = `${playerNameA}: ${aScore} biji &nbsp;•&nbsp; ${playerNameB}: ${bScore} biji`;
+  showModal(title, body);
+  return true;
+}
+
+function showModal(title, bodyHtml){
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = bodyHtml;
+  document.getElementById('modal-back').classList.remove('hidden');
+}
+
+/* ---------------- SIMULATOR STRATEGI ---------------- */
+function renderSimulator(){
+  const grid = document.getElementById('sim-grid');
+  grid.innerHTML='';
+  if(busy){
+    grid.innerHTML = `<div class="sim-empty">Simulator akan tampil kembali setelah animasi langkah selesai.</div>`;
+    return;
+  }
+  const player = currentPlayer;
+  const lumbung = ownLumbung(player);
+  const holes = ownHoles(player);
+  const options = holes.filter(i=>board[i]>0);
+  if(options.length===0){
+    grid.innerHTML = `<div class="sim-empty">Tidak ada lubang yang bisa dipilih.</div>`;
+    return;
+  }
+  const labelPrefix = player==='A' ? 'A' : 'B';
+  options.forEach(idx=>{
+    const sim = simulateMove(board, player, idx);
+    const gain = sim.board[lumbung]-board[lumbung];
+    const localNumber = holes.indexOf(idx)+1;
+    const captureEv = sim.events.find(e=>e.type==='capture');
+    const card = document.createElement('div');
+    card.className='sim-card' + (captureEv ? ' sim-capture' : '');
+    card.innerHTML = `
+      <div class="pit">Lubang ${labelPrefix}${localNumber} <span style="opacity:.6;font-size:.78em">(${board[idx]} biji)</span></div>
+      <div class="row"><span>Biji ke lumbung</span><b>+${gain}</b></div>
+      <div class="row"><span>Giliran tambahan</span><b class="${sim.extraTurn?'extra':'noextra'}">${sim.extraTurn?'Ya ✓':'Tidak'}</b></div>
+      <div class="row"><span>Total lubang dilewati</span><b>${sim.events.filter(e=>e.type==='drop').length}</b></div>
+      ${captureEv ? `<div class="row capture-flag">🎯 Menembak lawan <b>+${captureEv.gained}</b></div>` : ''}
+    `;
+    grid.appendChild(card);
+  });
+}
+
+/* ---------------- KONTROL PANEL ---------------- */
+document.querySelectorAll('.speed-option').forEach(el=>{
+  el.addEventListener('click', ()=>{
+    document.querySelectorAll('.speed-option').forEach(o=>o.classList.remove('active'));
+    el.classList.add('active');
+    speedMode = el.dataset.speed;
+  });
+});
+
+document.getElementById('toggle-speed').addEventListener('click', (e)=>{
+  showSpeed = !showSpeed;
+  document.getElementById('panel-speed').classList.toggle('hidden', !showSpeed);
+  e.currentTarget.classList.toggle('on', showSpeed);
+});
+document.getElementById('toggle-sim').addEventListener('click', (e)=>{
+  showSim = !showSim;
+  document.getElementById('panel-sim').classList.toggle('hidden', !showSim);
+  e.currentTarget.classList.toggle('on', showSim);
+});
+
+/* ---------------- NAVIGASI ANTAR LAYAR ---------------- */
+function enterGameScreen(){
+  board = freshBoard();
+  currentPlayer = 'A';
+  busy = false;
+
+  buildBoardDOM();           // elemen lumA-label & lumB-label dibuat di sini
+  document.getElementById('lumA-label').textContent = `Lumbung ${playerNameA}`;
+  document.getElementById('lumB-label').textContent = `Lumbung ${playerNameB}`;
+
+  renderBoard();
+  setTurnBanner();
+  renderSimulator();
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('game-screen').classList.remove('hidden');
+  document.getElementById('modal-back').classList.add('hidden');
+  updateNetBadge();
+}
+
+function startGame(){
+  const inputA = document.getElementById('player-name-a').value.trim();
+  const inputB = document.getElementById('player-name-b').value.trim();
+  playerNameA = inputA || 'Pemain 1';
+  playerNameB = inputB || 'Pemain 2';
+  netMode = 'local'; myRole = 'A';
+  cleanupNetwork();
+  enterGameScreen();
+}
+
+document.getElementById('btn-play').addEventListener('click', startGame);
+document.getElementById('btn-rules').addEventListener('click', ()=>{
+  const btn = document.getElementById('btn-rules');
+  const panel = document.getElementById('rules-panel');
+  const willOpen = panel.classList.contains('hidden');
+  panel.classList.toggle('hidden');
+  btn.classList.toggle('open', willOpen);
+  btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+});
+document.getElementById('player-name-a').addEventListener('keydown', e=>{
+  if(e.key==='Enter') document.getElementById('player-name-b').focus();
+});
+document.getElementById('player-name-b').addEventListener('keydown', e=>{
+  if(e.key==='Enter') startGame();
+});
+
+document.getElementById('btn-home').addEventListener('click', ()=>{
+  cleanupNetwork();
+  document.getElementById('game-screen').classList.add('hidden');
+  document.getElementById('modal-back').classList.add('hidden');
+  document.getElementById('start-screen').classList.remove('hidden');
+  document.getElementById('player-name-a').value = playerNameA==='Pemain 1' ? '' : playerNameA;
+  document.getElementById('player-name-b').value = playerNameB==='Pemain 2' ? '' : playerNameB;
+  document.getElementById('player-name-a').focus();
+});
+
+document.getElementById('modal-rematch').addEventListener('click', ()=>{
+  if(netMode==='guest'){
+    // tamu tidak berwenang mereset — hanya meminta host untuk memulai ulang
+    if(conn && conn.open) conn.send({type:'rematch-request'});
+    return;
+  }
+  if(netMode==='host'){
+    doRematchAsHost();
+    return;
+  }
+  document.getElementById('modal-back').classList.add('hidden');
+  board = freshBoard();
+  currentPlayer='A'; busy=false;
+  renderBoard(); setTurnBanner(); renderSimulator();
+});
+document.getElementById('modal-home').addEventListener('click', ()=>{
+  cleanupNetwork();
+  document.getElementById('modal-back').classList.add('hidden');
+  document.getElementById('game-screen').classList.add('hidden');
+  document.getElementById('start-screen').classList.remove('hidden');
+});
+
+/* ============================================================
+   MODE ONLINE — koneksi peer-to-peer via PeerJS (WebRTC)
+   Dua HP berbeda, tidak perlu server sendiri. Host = otoritas
+   satu-satunya untuk simulateMove()/checkGameEnd() (sudah dipakai
+   di performLocalMove/onHoleClick di atas); bagian ini HANYA
+   mengurus pembukaan koneksi, pertukaran nama, dan pengiriman
+   pesan — tidak menyentuh aturan permainan sama sekali.
+   ============================================================ */
+const ROOM_PREFIX = 'congxion-';
+let hostDisplayName = '';
+let guestDisplayName = '';
+
+function genRoomCode(){
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // tanpa I/O/0/1 biar tidak tertukar saat dibaca
+  let s = '';
+  for(let i=0;i<5;i++) s += chars[Math.floor(Math.random()*chars.length)];
+  return s;
+}
+
+function updateNetBadge(){
+  const badge = document.getElementById('net-badge');
+  if(netMode==='local'){ badge.classList.add('hidden'); return; }
+  badge.classList.remove('hidden','err','wait');
+  badge.classList.add('ok');
+  badge.innerHTML = netMode==='host'
+    ? `🌐 Host &middot; Anda: ${playerNameA}`
+    : `🌐 Tamu &middot; Anda: ${playerNameB}`;
+}
+
+function setNetDisconnected(){
+  if(netMode==='local') return;
+  const badge = document.getElementById('net-badge');
+  badge.classList.remove('hidden','ok','wait');
+  badge.classList.add('err');
+  badge.innerHTML = `🔌 Koneksi terputus`;
+}
+
+function cleanupNetwork(){
+  if(conn){ try{ conn.close(); }catch(e){} conn = null; }
+  if(peer){ try{ peer.destroy(); }catch(e){} peer = null; }
+  netMode = 'local'; myRole = 'A';
+  document.getElementById('net-badge').classList.add('hidden');
+  const box = document.getElementById('room-code-box');
+  if(box) box.classList.add('hidden');
+  const bcr = document.getElementById('btn-create-room'); if(bcr) bcr.disabled = false;
+  const bjr = document.getElementById('btn-join-room'); if(bjr) bjr.disabled = false;
+  const sh = document.getElementById('net-status-host'); if(sh){ sh.textContent=''; sh.className='net-status'; }
+  const sj = document.getElementById('net-status-join'); if(sj){ sj.textContent=''; sj.className='net-status'; }
+}
+
+// Menangani semua pesan masuk dari lawan, dipakai baik oleh HOST maupun TAMU.
+function wireConnection(){
+  conn.on('data', (msg)=>{
+    if(!msg || !msg.type) return;
+    switch(msg.type){
+      case 'join-info': { // diterima HOST: tamu sudah terhubung & mengirim namanya
+        playerNameA = hostDisplayName;
+        playerNameB = msg.name || 'Pemain 2';
+        conn.send({type:'game-start', playerNameA, playerNameB});
+        enterGameScreen();
+        break;
+      }
+      case 'game-start': { // diterima TAMU: host mengonfirmasi permainan dimulai
+        playerNameA = msg.playerNameA;
+        playerNameB = msg.playerNameB;
+        enterGameScreen();
+        break;
+      }
+      case 'move-request': { // diterima HOST: tamu meminta jalan di lubangnya
+        if(netMode==='host' && currentPlayer==='B') performLocalMove(msg.idx);
+        break;
+      }
+      case 'move-result': { // diterima TAMU: hasil resmi satu langkah dari host
+        if(netMode==='guest') applyRemoteMoveResult(msg);
+        break;
+      }
+      case 'rematch': { // diterima kedua sisi: host memulai ulang papan
+        document.getElementById('modal-back').classList.add('hidden');
+        board = freshBoard(); currentPlayer='A'; busy=false;
+        renderBoard(); setTurnBanner(); renderSimulator();
+        break;
+      }
+      case 'rematch-request': { // diterima HOST: tamu minta main lagi
+        if(netMode==='host') doRematchAsHost();
+        break;
+      }
+    }
+  });
+  conn.on('close', setNetDisconnected);
+  conn.on('error', setNetDisconnected);
+}
+
+function doRematchAsHost(){
+  document.getElementById('modal-back').classList.add('hidden');
+  board = freshBoard(); currentPlayer='A'; busy=false;
+  renderBoard(); setTurnBanner(); renderSimulator();
+  if(conn && conn.open) conn.send({type:'rematch'});
+}
+
+/* --- Buat Room (jadi Pemain 1 / Host) --- */
+document.getElementById('btn-create-room').addEventListener('click', ()=>{
+  const statusEl = document.getElementById('net-status-host');
+  const btn = document.getElementById('btn-create-room');
+  hostDisplayName = document.getElementById('net-name-host').value.trim() || 'Pemain 1';
+
+  cleanupNetwork();
+  netMode = 'host'; myRole = 'A';
+  btn.disabled = true;
+  statusEl.className = 'net-status';
+  statusEl.textContent = 'Membuka room...';
+
+  const code = genRoomCode();
+  peer = new Peer(ROOM_PREFIX + code);
+
+  peer.on('open', ()=>{
+    document.getElementById('room-code-box').classList.remove('hidden');
+    document.getElementById('room-code-display').textContent = code;
+    statusEl.className = 'net-status';
+    statusEl.textContent = 'Menunggu Pemain 2 bergabung dari HP-nya sendiri...';
+  });
+
+  peer.on('connection', (c)=>{
+    conn = c;
+    wireConnection();
+    conn.on('open', ()=>{
+      statusEl.className = 'net-status ok';
+      statusEl.textContent = 'Pemain 2 terhubung! Memulai permainan...';
+    });
+  });
+
+  peer.on('error', (err)=>{
+    statusEl.className = 'net-status err';
+    statusEl.textContent = 'Gagal membuka room (' + (err && err.type ? err.type : 'coba lagi') + ').';
+    btn.disabled = false;
+  });
+
+  peer.on('disconnected', setNetDisconnected);
+});
+
+/* --- Gabung Room (jadi Pemain 2 / Tamu) --- */
+document.getElementById('btn-join-room').addEventListener('click', ()=>{
+  const statusEl = document.getElementById('net-status-join');
+  const btn = document.getElementById('btn-join-room');
+  guestDisplayName = document.getElementById('net-name-join').value.trim() || 'Pemain 2';
+  const code = document.getElementById('net-room-input').value.trim().toUpperCase();
+
+  if(!code){
+    statusEl.className = 'net-status err';
+    statusEl.textContent = 'Masukkan kode room terlebih dahulu.';
+    return;
+  }
+
+  cleanupNetwork();
+  netMode = 'guest'; myRole = 'B';
+  btn.disabled = true;
+  statusEl.className = 'net-status';
+  statusEl.textContent = 'Menghubungkan ke room ' + code + '...';
+
+  peer = new Peer();
+
+  peer.on('open', ()=>{
+    conn = peer.connect(ROOM_PREFIX + code, {reliable:true});
+    wireConnection();
+    conn.on('open', ()=>{
+      statusEl.className = 'net-status ok';
+      statusEl.textContent = 'Terhubung! Menunggu host memulai permainan...';
+      conn.send({type:'join-info', name: guestDisplayName});
+    });
+  });
+
+  peer.on('error', (err)=>{
+    statusEl.className = 'net-status err';
+    statusEl.textContent = 'Gagal terhubung — periksa kembali kode room (' + (err && err.type ? err.type : 'error') + ').';
+    btn.disabled = false;
+  });
+});
+
+/* --- Buka/tutup panel "Main Online" + tab Buat Room / Gabung Room --- */
+document.getElementById('btn-online-toggle').addEventListener('click', ()=>{
+  const btn = document.getElementById('btn-online-toggle');
+  const panel = document.getElementById('online-panel');
+  const willOpen = panel.classList.contains('hidden');
+  panel.classList.toggle('hidden');
+  btn.classList.toggle('open', willOpen);
+  btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+});
+
+function switchOnlineTab(which){
+  document.getElementById('tab-host').classList.toggle('active', which==='host');
+  document.getElementById('tab-join').classList.toggle('active', which==='join');
+  document.getElementById('online-host-sub').classList.toggle('hidden', which!=='host');
+  document.getElementById('online-join-sub').classList.toggle('hidden', which!=='join');
+}
+document.getElementById('tab-host').addEventListener('click', ()=>switchOnlineTab('host'));
+document.getElementById('tab-join').addEventListener('click', ()=>switchOnlineTab('join'));
+</script>
+</body>
+</html>
